@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更新商品价格</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+    }
+
+    #update-result {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>更新商品价格</h2>
+
+  <div>
+    <label for="product-id">产品ID:</label>
+    <input type="text" id="product-id" placeholder="输入产品ID" required>
+  </div>
+
+  <div>
+    <label for="new-price">新价格:</label>
+    <input type="number" id="new-price" placeholder="输入新价格" step="0.01" required>
+  </div>
+
+  <button id="update-price-btn">更新价格</button>
+
+  <div id="update-result"></div>
+
+  <script>
+    document.getElementById('update-price-btn').addEventListener('click', function () {
+      const productId = document.getElementById('product-id').value;
+      const newPrice = document.getElementById('new-price').value;
+
+      // 验证输入
+      if (!productId || !newPrice) {
+        alert('产品ID和新价格不能为空');
+        return;
+      }
+
+      // 使用AJAX请求更新商品价格
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', `/update-price/${productId}`, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          const resultDiv = document.getElementById('update-result');
+          if (xhr.status === 200) {
+            resultDiv.textContent = '价格更新成功！';
+            resultDiv.style.color = 'green';
+          } else {
+            resultDiv.textContent = '价格更新失败，请重试。';
+            resultDiv.style.color = 'red';
+          }
+        }
+      };
+      xhr.send(JSON.stringify({ price: newPrice }));
+    });
+  </script>
+</body>
+
+</html>

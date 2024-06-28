@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form>div {
+      margin-bottom: 15px;
+    }
+
+    form div label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    form div input {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    form div input[type="submit"] {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form div input[type="submit"]:hover {
+      background-color: #4cae4c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h2>新用户注册</h2>
+
+    <form id="registration-form">
+      <div>
+        <label for="user-role">用户角色:</label>
+        <select id="user-role">
+          <option value="wholesaler">批发商</option>
+          <option value="purchaser">采购商</option>
+        </select>
+      </div>
+      <div>
+        <label for="reg-username">用户名:</label>
+        <input type="text" id="reg-username" placeholder="请输入用户名" required>
+      </div>
+      <div>
+        <label for="reg-email">邮箱地址:</label>
+        <input type="email" id="reg-email" placeholder="请输入邮箱地址" required>
+      </div>
+      <div>
+        <label for="reg-password">密码:</label>
+        <input type="password" id="reg-password" placeholder="请输入密码" required>
+      </div>
+      <div>
+        <label for="reg-confirm-password">确认密码:</label>
+        <input type="password" id="reg-confirm-password" placeholder="请确认密码" required>
+      </div>
+      <div>
+        <input type="submit" value="注册">
+      </div>
+    </form>
+
+  </div>
+
+  <script>
+    document.getElementById('registration-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      // 收集表单数据
+      const username = document.getElementById('reg-username').value;
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      // 简单的验证：确认密码是否与密码匹配
+      if (password !== confirmPassword) {
+        alert('两次输入的密码不匹配');
+        return;
+      }
+
+
+      console.log('注册用户：', { username, email, password });
+
+      // 假设注册成功
+      alert('注册成功！');
+
+      window.location.href = 'login.html'; // 重定向到登录页面
+    });
+  </script>
+
+</body>
+
+</html>

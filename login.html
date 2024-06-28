@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录界面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-container {
+      max-width: 300px;
+      margin: 100px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(125, 108, 108, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form>div {
+      margin-bottom: 15px;
+    }
+
+    form div label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    form div input {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    form div input[type="submit"] {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form div input[type="submit"]:hover {
+      background-color: #4cae4c;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <h2>登录</h2>
+    <div>
+      <label for="user-role">用户角色:</label>
+      <select id="user-role" name="user-role">
+        <option value="wholesaler">批发商</option>
+        <option value="purchaser">采购商</option>
+        <option value="admin">管理员</option>
+      </select>
+    </div>
+    <form id="login-form" action="http://localhost:5000/login" method="post">
+      <div>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" placeholder="用户名" required>
+      </div>
+      <div>
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password" placeholder="密码" required>
+      </div>
+      <div id="login-result"></div>
+      <div>
+        <input type="submit" value="登录">
+        <input type="button" value="注册" onclick="window.location.href = 'enroll.html';">
+      </div>
+    </form>
+  </div>
+</body>
+<script>
+ document.getElementById('login-form').addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  var username = document.getElementById('username').value;
+  var password = document.getElementById('password').value;
+  var userRole = document.getElementById('user-role').value;
+
+  fetch('http://localhost:5000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&role=' + encodeURIComponent(userRole)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.error) {
+      document.getElementById('login-result').innerText = data.error;
+    } else {
+      // 登录成功后的操作
+      document.getElementById('login-result').innerText = '登录成功';
+      document.cookie = "loggedInUsername=" + encodeURIComponent(username) + "; path=/; max-age=3600"; // 设置cookie有效期1小时
+      window.location.href = getRoleBasedPage(userRole);
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    document.getElementById('login-result').innerText = '登录失败，请重试。';
+  });
+});
+
+function getRoleBasedPage(role) {
+  switch (role) {
+    case 'wholesaler':
+      return 'saler.html';
+    case 'purchaser':
+      return 'customer.html';
+    case 'admin':
+      return 'manager.html';
+    default:
+      return 'index.html';
+  }
+}
+</script>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>订单处理页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+    }
+
+    .order-status {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>订单处理</h2>
+
+  <div id="orderInfo"></div>
+
+  <div class="order-status">
+    <button onclick="receiveOrder()">接收订单</button>
+    <button onclick="confirmOrder()">确认订单</button>
+    <button onclick="shipOrder()">发货</button>
+  </div>
+
+  <script>
+    // 假设这是从服务器获取的订单数据
+    const order = {
+      id: 'Order123',
+      status: 'pending', // 订单状态：pending, received, confirmed, shipped
+      details: '商品详情'
+    };
+
+    function updateOrderStatus(status) {
+      order.status = status;
+      displayOrderStatus();
+    }
+
+    function displayOrderStatus() {
+      const orderInfo = document.getElementById('orderInfo');
+      orderInfo.textContent = `订单ID: ${order.id}, 状态: ${order.status}, 详情: ${order.details}`;
+    }
+
+    function receiveOrder() {
+      if (order.status === 'pending') {
+        updateOrderStatus('received');
+      }
+    }
+
+    function confirmOrder() {
+      if (order.status === 'received') {
+        updateOrderStatus('confirmed');
+      }
+    }
+
+    function shipOrder() {
+      if (order.status === 'confirmed') {
+        updateOrderStatus('shipped');
+      }
+    }
+
+    // 初始显示订单状态
+    displayOrderStatus();
+  </script>
+</body>
+
+</html>

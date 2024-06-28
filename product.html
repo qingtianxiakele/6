@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品展示页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 8px;
+    }
+
+    .form-group input[type="file"] {
+      margin-top: 5px;
+    }
+
+    #products {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>添加商品</h2>
+
+  <div class="form-group">
+    <label for="productName">商品名称：</label>
+    <input type="text" id="productName" placeholder="输入商品名称">
+  </div>
+
+  <div class="form-group">
+    <label for="productImage">上传图片：</label>
+    <input type="file" id="productImage" accept="image/*">
+  </div>
+
+  <div class="form-group">
+    <label for="productPrice">价格：</label>
+    <input type="number" id="productPrice" placeholder="输入价格">
+  </div>
+
+  <div class="form-group">
+    <label for="productStock">库存：</label>
+    <input type="number" id="productStock" placeholder="输入库存">
+  </div>
+  <div class="form-group">
+    <label for="productdescribe">商品描述：</label>
+    <input type="text" id="productdescribe" placeholder="输入商品描述">
+  </div>
+
+  <button onclick="addProduct()">添加商品</button>
+
+  <h2 id="products">商品展示</h2>
+
+  <script>
+    // 商品数组
+    let products = [];
+
+    function addProduct() {
+      // 构建FormData对象
+      const formData = new FormData();
+      formData.append('productName', document.getElementById('productName').value);
+      formData.append('productImage', document.getElementById('productImage').files[0]);
+      formData.append('productPrice', document.getElementById('productPrice').value);
+      formData.append('productStock', document.getElementById('productStock').value);
+      formData.append('productdescribe', document.getElementById('productdescribe').value);
+      const username = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('loggedInUsername'))
+        ?.split('=')[1];
+      if (username) {
+        formData.append('username', username);
+      }
+
+      // 发送POST请求到服务器
+      fetch('http://localhost:5000/add_product', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data.message);
+          // 清空输入框和文件选择
+          document.getElementById('productName').value = '';
+          document.getElementById('productImage').value = '';
+          document.getElementById('productPrice').value = '';
+          document.getElementById('productStock').value = '';
+          document.getElementById('productdescribe').value = '';
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+
+    function displayProducts() {
+      const productsElement = document.getElementById('products');
+      productsElement.innerHTML = '<h2>商品展示</h2>'; // 重置商品展示区域
+
+      // 遍历商品数组并添加到页面
+      products.forEach((product, index) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.innerHTML = `
+      <h3>${product.name}</h3>
+      <img src="${URL.createObjectURL(product.image)}" alt="${product.name}" style="max-width: 100px; height: auto;">
+      <p>价格: ${product.price}</p>
+      <p>库存: ${product.stock}</p>
+    `;
+
+        productsElement.appendChild(productCard);
+      });
+    }
+  </script>
+
+</body>
+
+</html>

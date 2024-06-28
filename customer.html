@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>采购商系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('background-image.jpg');
+            /* 替换为你的背景图路径 */
+            background-size: cover;
+            /* 背景图覆盖整个元素 */
+            background-attachment: fixed;
+            /* 背景图固定，不随滚动条滚动 */
+            background-position: center center;
+            /* 背景图居中显示 */
+            background-repeat: no-repeat;
+            /* 背景图不重复 */
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-image {
+            max-width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 商品浏览 -->
+        <h2>商品浏览</h2>
+        <div id="products">
+            <!-- 这里将动态生成商品卡片 -->
+        </div>
+        <div>
+            <h3>总价: <span id="totalPrice">0</span>元</h3>
+        </div>
+    </div>
+    <script>
+        function fetchAndDisplayProducts() {
+            fetch('http://localhost:5000/api/products')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(products => {
+                    const productsContainer = document.getElementById('products');
+                    productsContainer.innerHTML = ''; // 清空现有商品
+                    products.forEach(product => {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+                        productCard.innerHTML = `
+                    <h3>${product.commodity_name}</h3>
+                    <img src="${product.picture}" alt="${product.describe}">
+                    <p>价格: ${product.price}元</p>
+                    <p>库存: ${product.num}</p>
+                    <button onclick="updateProductQuantity(${JSON.stringify(product)}, -1)">-</button>
+                    <input type="number" class="product-quantity" data-product-id="${product.commodity_name}" value="0" min="0" max=${product.num} onchange="updateProductQuantity(${JSON.stringify(product)}, parseInt(this.value) - (this.dataset.prevValue || 0))">
+                    <button onclick="updateProductQuantity(${JSON.stringify(product)}, 1)">+</button>`;
+                        // 存储初始数量，以便在输入框改变时使用
+                        productCard.querySelector('.product-quantity').dataset.prevValue = 0;
+                        productsContainer.appendChild(productCard);
+                        // 定义购物车对象
+                        let cart = {};
+
+                        function updateProductQuantity(product, quantityChange) {
+                            let currentQuantity =  0;
+
+                            // 更新购物车中的数量
+                            currentQuantity += quantityChange;
+
+                            // 确保数量不会小于0或超过库存
+                            if (currentQuantity < 0) {
+                                currentQuantity = 0;
+                            } else if (currentQuantity > product.num) {
+                                currentQuantity = product.num;
+                            }
+
+                            cart[productId] = currentQuantity;
+
+                            // 更新页面上的数量显示
+                            document.querySelectorAll('.product-quantity').forEach((element) => {
+                                if (element.dataset.productId === productId) {
+                                    element.value = currentQuantity;
+                                    element.dataset.prevValue = currentQuantity; // 存储当前值
+                                }
+                            });
+                            // 计算总价
+                            updateTotalPrice();
+                        }
+                        function updateTotalPrice() {
+                            let total = 0;
+                            for (let product in cart) {
+                                total += cart[product] * products.find(p => p.commodity_name === product.commodity_name).price;
+                            }
+                            document.getElementById('totalPrice').textContent = total;
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching products:', error));
+        }
+        // 页面加载完成后调用此函数
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndDisplayProducts();
+        });
+    </script>
+</body>
+
+</html>

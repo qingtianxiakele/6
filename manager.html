@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理员系统</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    功能 {
+      margin-bottom: 40px;
+    }
+
+    功能 h3 {
+      margin-bottom: 20px;
+    }
+
+    功能 form>div {
+      margin-bottom: 15px;
+    }
+
+    功能 label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    功能 input[type="text"],
+    功能 input[type="number"],
+    功能 input[type="email"],
+    功能 select {
+      width: 100%;
+      padding: 10px;
+    }
+
+    功能 button {
+      padding: 10px 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- 交易监管 -->
+    <div class="功能" id="trade-regulation">
+      <h3>交易监管</h3>
+      <!-- 这里可以放置用于监控交易行为的表单或按钮 -->
+      <button onclick="监管交易()">开始监管</button>
+    </div>
+
+    <!-- 用户管理 -->
+    <div class="功能" id="user-management">
+      <h3>用户管理</h3>
+      <form id="user-registration-form">
+        <div>
+          <label for="num">ID:</label>
+          <input type="number" id="ID" required>
+        </div>
+        <div>
+          <label for="user-role">角色:</label>
+          <select id="user-role" required>
+            <option value="wholesaler">批发商</option>
+            <option value="purchaser">采购商</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" onclick="删除用户()">删除</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 数据分析 -->
+    <div class="功能" id="data-analysis">
+      <h3>数据分析</h3>
+      <!-- 这里可以放置数据分析工具或链接到后台管理系统 -->
+      <button onclick="分析数据()">分析</button>
+    </div>
+
+    <!-- 管理账号创建 -->
+    <div class="功能" id="admin-account-creation">
+      <h3>管理账号创建</h3>
+      <form id="admin-account-form">
+        <div>
+          <label for="admin-name">管理员ID:</label>
+          <input type="text" id="admin-name" required>
+        </div>
+        <div>
+          <label for="admin-email">邮箱:</label>
+          <input type="email" id="admin-email" required>
+        </div>
+        <div>
+          <button type="submit" onclick="创建管理账号()">创建</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 订单管理 -->
+    <div class="功能" id="order-management">
+      <h3>订单管理</h3>
+      <!-- 这里可以放置订单列表和删除按钮 -->
+      <button onclick="删除订单()">删除选定订单</button>
+    </div>
+
+  </div>
+
+  <script>
+    // 以下是各个功能的点击事件处理函数示例
+
+    function 监管交易() {
+      // TODO: 实现交易监管逻辑
+      alert('交易监管功能待实现');
+    }
+
+    function 删除用户() {
+      // TODO: 实现用户注册逻辑
+      alert('用户删除功能待实现');
+    }
+
+    function 分析数据() {
+      // TODO: 实现数据分析逻辑
+      alert('数据分析功能待实现');
+    }
+
+    function 创建管理账号() {
+      // TODO: 实现管理账号创建逻辑
+      alert('管理账号创建功能待实现');
+    }
+
+    function 删除订单() {
+      // TODO: 实现订单删除逻辑
+      alert('订单删除功能待实现');
+    }
+
+    // 为了防止表单默认提交行为
+    document.getElementById('user-registration-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      注册用户();
+    });
+
+    document.getElementById('admin-account-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      创建管理账号();
+    });
+  </script>
+
+</body>
+
+</html>

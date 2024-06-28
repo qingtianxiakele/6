@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>库存更新页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background-image.jpg');
+      /* 替换为你的背景图路径 */
+      background-size: cover;
+      /* 背景图覆盖整个元素 */
+      background-attachment: fixed;
+      /* 背景图固定，不随滚动条滚动 */
+      background-position: center center;
+      /* 背景图居中显示 */
+      background-repeat: no-repeat;
+      /* 背景图不重复 */
+    }
+
+    #inventory-update {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>更新库存数量</h2>
+
+  <div>
+    <label for="product-id">产品ID:</label>
+    <input type="text" id="product-id" placeholder="输入产品ID">
+  </div>
+
+  <div>
+    <label for="new-stock">新的库存数量:</label>
+    <input type="number" id="new-stock" placeholder="输入新的库存数量">
+  </div>
+
+  <button id="update-inventory-btn">更新库存</button>
+
+  <div id="inventory-update"></div>
+
+  <script>
+    document.getElementById('update-inventory-btn').addEventListener('click', function () {
+      const productId = document.getElementById('product-id').value;
+      const newStock = document.getElementById('new-stock').value;
+
+      // 验证输入
+      if (!productId || !newStock) {
+        alert('请填写产品ID和新的库存数量');
+        return;
+      }
+
+      // 使用AJAX请求更新库存
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/update-inventory', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // 成功更新库存
+            document.getElementById('inventory-update').textContent = '库存更新成功！';
+          } else {
+            // 更新库存失败
+            document.getElementById('inventory-update').textContent = '库存更新失败，请重试。';
+          }
+        }
+      };
+      xhr.send(JSON.stringify({
+        productId: productId,
+        stock: newStock
+      }));
+    });
+  </script>
+
+</body>
+
+</html>
